@@ -13,40 +13,27 @@ class Storage
         {
             if (ware_for_req.empty() || w > ware_for_req.top())
                 ware_for_req.push(w);
-            ware_for_req.push(w);
+            else
+                ware_for_req.push(ware_for_req.top());   // 每次入栈时存储当前栈内最大值，出栈时同时出
+            ware.push(w);
         }
         inline bool out_from_storage()
         {
             if (!ware.empty())
             {
                 ware.pop();
+                ware_for_req.pop();
                 return false;
             } 
             return true;
         }
-        // 这是会超时的做法，用辅助栈先存所有的货物求最大值
         inline int query_max_in_storage()
         {
             
             if (ware.empty())
                 return 0;
             else
-            {
-                int max_weight = 0;
-                while (!ware.empty())
-                {
-                    max_weight = ware.top() > max_weight ? ware.top() : max_weight;
-                    ware_for_req.push(ware.top());
-                    ware.pop();
-                }
-                while (!ware_for_req.empty())
-                {
-                    ware.push(ware_for_req.top());
-                    ware_for_req.pop();
-                }
-                return max_weight;
-            }
-            
+                return ware_for_req.top();
         }
 };
 
