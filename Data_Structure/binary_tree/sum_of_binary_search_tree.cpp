@@ -10,7 +10,8 @@ set<int> s;
 int main()
 {
     freopen("ICPC_Learning/Data_Structure/binary_tree/sum_of_binary_search_tree_in.in", "r", stdin);
-    int n, num, sum = 0;
+    int n, num;
+    long long sum = 0;  // N 很大时，层级的和会爆 int，需要用 long long
     cin >> n;
     s.insert(0);
     s.insert(n + 1); // 是为了出现当前最大最小值时，有返回迭代器
