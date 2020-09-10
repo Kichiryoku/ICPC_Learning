@@ -1,6 +1,6 @@
 #include <iostream>
-#include <queue>
-
+#include <algorithm>
+#include <vector>
 #include <cstdio>
 
 #define MAX_JOY_VALUE 2000000
@@ -13,34 +13,32 @@ struct movie
     movie(int L, int V) :l(L), v(V) {}
 };
 
-struct joy_value
+bool cmp(const movie a, const movie b)
 {
-    bool operator() (movie a, movie b)
-    {
-        return a.l * a.v < b.l * b.v;
-    }
-};
+    if (a.l * a.v == b.l * b.v)
+        return a.v > b.v;
+    return a.l * a.v > b.l * b.v;
+}
 
 int main()
 {
     freopen("ICPC_Learning/Data_Structure/queue/zexal_cinema_stdin.in", "r", stdin);
-    priority_queue<movie, vector<movie>, joy_value > movie_select;
+    vector<movie> movie_select;
     int n, k;
     cin >> n >> k;
     for (int i = 1; i <= n; i++)
     {
         int L, V;
         cin >> L >> V;
-        movie_select.push(movie(L, V));
+        movie_select.push_back(movie(L, V));
     }
+    sort(movie_select.begin(), movie_select.end(), cmp);
     long long sum_of_time = 0;
     int min_joy_value = MAX_JOY_VALUE;
-    for (int j = 1; j <= k; j++)
+    for (int j = 0; j < k; j++)
     {
-        movie tmp = movie_select.top();
-        sum_of_time += tmp.l;
-        min_joy_value = tmp.v < min_joy_value ? tmp.v : min_joy_value;
-        movie_select.pop();
+        sum_of_time += movie_select[j].l;
+        min_joy_value = min(min_joy_value, movie_select[j].v);
     }
     long long sum_of_joy_value = sum_of_time * min_joy_value;
     cout << sum_of_joy_value << endl;
